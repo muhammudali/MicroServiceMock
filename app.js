@@ -1,12 +1,13 @@
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 5000;
+const environment = process.env.NODE_ENV || 'development';
 
 // Endpoint 1: The main "Hello World" route
 app.get('/', (req, res) => {
   res.json({
     message: 'Hello World from GCP Cloud Run!',
-    environment: process.env.NODE_ENV || 'development',
+    environment: environment,
     timestamp: new Date().toISOString()
   });
 });
