@@ -1,0 +1,64 @@
+pipeline {
+    agent any
+
+    environment {
+        APP_NAME = "hello-microservice-api"
+        LOCAL_TAG = "latest"
+    }
+
+    stages {
+        stage('Cleanup Previous Deployment') {
+            steps {
+                script {
+                    // This ensures Terraform clears old containers before a new run
+                    dir('terraform/local') {
+                        sh 'terraform destroy -auto-approve || true'
+                    }
+                }
+            }
+        }
+
+        stage('Code Lint & Install') {
+            steps {
+                // Running npm install on the agent to check for dependency issues
+                sh 'npm install'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    // Build the image locally using the Docker daemon on your machine
+                    localImage = docker.build("${APP_NAME}:${LOCAL_TAG}")
+                }
+            }
+        }
+
+        stage('Deploy Locally via Terraform') {
+            steps {
+                dir('terraform/local') {
+                    sh 'terraform init'
+                    // Apply the local Docker provider configuration
+                    sh 'terraform apply -auto-approve'
+                }
+            }
+        }
+
+        stage('Verify Deployment') {
+            steps {
+                // A quick curl check to see if the container is actually responding
+                sh 'sleep 5'
+                sh 'curl http://localhost:5000/health'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "Local deployment successful! App is running at http://localhost:5000"
+        }
+        failure {
+            echo "Pipeline failed. Check Docker logs or Terraform state."
+        }
+    }
+}

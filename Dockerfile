@@ -3,6 +3,7 @@ FROM node:alpine3.22
 
 # 2. Set the environment to production explicitly
 ENV NODE_ENV=production
+ENV PORT=5000
 
 # 3. Set the working directory inside the container
 WORKDIR /usr/src/app
@@ -26,4 +27,4 @@ USER node
 EXPOSE 5000
 
 # 10. Start the application
-CMD ["node", "index.js"]
+CMD ["node", "app.js"]
