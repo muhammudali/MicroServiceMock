@@ -12,7 +12,7 @@ pipeline {
             steps {
                 script {
                     // Build the image locally using the Docker daemon on your machine
-                    localImage = docker.build("${APP_NAME}:${LOCAL_TAG}")
+                    localImage = docker.build("${APP_NAME}:${LOCAL_TAG} .")
                 }
             }
         }
