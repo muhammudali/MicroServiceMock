@@ -9,7 +9,7 @@ pipeline {
 environment {
         APP_NAME = "hello-microservice-api"
         LOCAL_TAG = "latest"        
-        GCP_PROJECT = 'Mock-MicroService'
+        GCP_PROJECT = 'mock-microservice'
         GCP_REGION  = 'europe-west2'
         IMAGE_NAME  = "europe-west2-docker.pkg.dev/${GCP_PROJECT}/microservices/${APP_NAME}:${env.BUILD_NUMBER}"
         //IMAGE_NAME  = "europe-west2-docker.pkg.dev/${GCP_PROJECT}/microservices/node-hello-world:${env.BUILD_NUMBER}"
