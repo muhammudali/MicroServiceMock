@@ -38,7 +38,7 @@ environment {
             steps {
                 sh "gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS"
                 sh "gcloud auth configure-docker $GCP_REGION-docker.pkg.dev"
-                sh "docker tag node-hello-world ${IMAGE_NAME}"
+                sh "docker tag ${APP_NAME}:${env.BUILD_NUMBER} ${IMAGE_NAME}"
                 sh "docker push ${IMAGE_NAME}"
             }
         }
