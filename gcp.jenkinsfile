@@ -24,6 +24,7 @@ environment {
                 }
             }
         }
+        /*
         stage('Deploy Locally via Terraform') {
             steps {
                 dir('terraform/local') {
@@ -32,7 +33,7 @@ environment {
                     sh 'terraform apply -auto-approve'
                 }
             }
-        }
+        }*/
         stage('Push to GCP') {
             steps {
                 sh "gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS"
