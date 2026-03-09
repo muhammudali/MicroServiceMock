@@ -36,15 +36,15 @@ pipeline {
             }
         }
         // NEW STAGE: Teardown
-        stage('Clean Up Local Infrastructure') {
-            steps {
-                dir('terraform/local') {
+    stage('Clean Up Local Infrastructure') {
+        steps {
+            dir('terraform/local') {
                 // Destroys the container so the port is free for the next build
-                sh 'terraform destroy -auto-approve'
-                }
+                    sh 'terraform destroy -auto-approve'
+                    }
             }
         }
-
+    }
     post {
         success {
             echo "Local deployment successful! App is running at http://localhost:5000"
