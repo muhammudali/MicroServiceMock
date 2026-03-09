@@ -7,16 +7,6 @@ pipeline {
     }
 
     stages {
-        stage('Cleanup Previous Deployment') {
-            steps {
-                script {
-                    // This ensures Terraform clears old containers before a new run
-                    dir('terraform/local') {
-                        sh 'terraform destroy -auto-approve || true'
-                    }
-                }
-            }
-        }
 
         stage('Build Docker Image') {
             steps {
