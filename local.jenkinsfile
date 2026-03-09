@@ -32,7 +32,7 @@ pipeline {
             steps {
                 // A quick curl check to see if the container is actually responding
                 sh 'sleep 5'
-                sh 'curl http://localhost:5000/health'
+                sh 'curl http://host.docker.internal:5000/health'
             }
         }
         // NEW STAGE: Teardown
@@ -47,7 +47,7 @@ pipeline {
     }
     post {
         success {
-            echo "Local deployment successful! App is running at http://localhost:5000"
+            echo "Local deployment successful! App is running at http://host.docker.internal:5000"
         }
         failure {
             echo "Pipeline failed. Check Docker logs or Terraform state."
