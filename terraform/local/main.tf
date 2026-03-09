@@ -6,7 +6,10 @@ terraform {
     }
   }
 }
-provider "docker" {}
+provider "docker" {
+  # This tells Terraform to use the host's Docker engine mapped to Jenkins
+  host = "unix:///var/run/docker.sock"
+}
 
 resource "docker_image" "hello_world" {
   name = "hello-microservice-api:latest"
