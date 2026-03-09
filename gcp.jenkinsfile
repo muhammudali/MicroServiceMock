@@ -1,11 +1,10 @@
 pipeline {
     agent any
-/*
-    environment {
-        APP_NAME = "hello-microservice-api"
-        LOCAL_TAG = "latest"
+triggers {
+        // Option A: Generic Webhook (Recommended)
+        // This waits for a "push" event from GitHub/GitLab
+        githubPush() 
     }
-*/
 environment {
         APP_NAME = "hello-microservice-api"
         LOCAL_TAG = "latest"        
