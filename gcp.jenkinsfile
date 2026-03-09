@@ -20,7 +20,7 @@ environment {
         stage('Build Image') {
             steps {
                 script {
-                    app = docker.build("${APP_NAME}:${LOCAL_TAG}")
+                    app = docker.build("${APP_NAME}:${env.BUILD_NUMBER}")
                 }
             }
         }
