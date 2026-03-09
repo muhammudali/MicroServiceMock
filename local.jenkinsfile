@@ -13,6 +13,7 @@ pipeline {
                 script {
                     // Build the image locally using the Docker daemon on your machine
                     //localImage = docker.build("${APP_NAME}:${LOCAL_TAG} .")
+                    sh 'docker rm -f local-test-app || true'
                     sh "docker build -t ${APP_NAME}:${LOCAL_TAG} ."
                 }
             }
@@ -35,17 +36,16 @@ pipeline {
                 sh 'curl http://host.docker.internal:5000/health'
             }
         }
-        // NEW STAGE: Teardown
-    stage('Clean Up Local Infrastructure') {
-        steps {
-            dir('terraform/local') {
-                // Destroys the container so the port is free for the next build
-                    sh 'terraform destroy -auto-approve'
-                    }
-            }
-        }
+
     }
     post {
+        always {
+            // This will ALWAYS run, guaranteeing your port is freed up
+            echo "Tearing down local infrastructure..."
+            dir('terraform/local') {
+                sh 'terraform destroy -auto-approve || true' 
+            }
+        }
         success {
             echo "Local deployment successful! App is running at http://host.docker.internal:5000"
         }
