@@ -3,6 +3,11 @@ provider "google" {
   region  = "europe-west2"
 }
 
+variable "image_url" {
+  description = "The Docker image URL passed from the Jenkins pipeline"
+  type        = string
+}
+
 resource "google_artifact_registry_repository" "my-repo" {
   location      = "europe-west2"
   repository_id = "microservices"
@@ -14,7 +19,7 @@ resource "google_cloud_run_v2_service" "default" {
   location = "europe-west2"
   template {
     containers {
-      image = "europe-west2-docker.pkg.dev/Mock-MicroService/microservices/hello-microservice-api:latest"
+      image = var.image_url
     }
   }
 }
