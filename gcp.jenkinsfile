@@ -1,0 +1,71 @@
+pipeline {
+    agent any
+/*
+    environment {
+        APP_NAME = "hello-microservice-api"
+        LOCAL_TAG = "latest"
+    }
+*/
+environment {
+        APP_NAME = "hello-microservice-api"
+        LOCAL_TAG = "latest"        
+        GCP_PROJECT = 'Mock-MicroService'
+        GCP_REGION  = 'europe-west2'
+        IMAGE_NAME  = "europe-west2-docker.pkg.dev/${GCP_PROJECT}/microservices/${APP_NAME}:${env.BUILD_NUMBER}"
+        //IMAGE_NAME  = "europe-west2-docker.pkg.dev/${GCP_PROJECT}/microservices/node-hello-world:${env.BUILD_NUMBER}"
+        GOOGLE_APPLICATION_CREDENTIALS = credentials('gcp-creds')
+    }
+    stages {
+
+        stage('Build Image') {
+            steps {
+                script {
+                    app = docker.build("${APP_NAME}:${LOCAL_TAG}")
+                }
+            }
+        }
+        stage('Deploy Locally via Terraform') {
+            steps {
+                dir('terraform/local') {
+                    sh 'terraform init'
+                    // Apply the local Docker provider configuration
+                    sh 'terraform apply -auto-approve'
+                }
+            }
+        }
+        stage('Push to GCP') {
+            steps {
+                sh "gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS"
+                sh "gcloud auth configure-docker $GCP_REGION-docker.pkg.dev"
+                sh "docker tag node-hello-world ${IMAGE_NAME}"
+                sh "docker push ${IMAGE_NAME}"
+            }
+        }
+        stage('GCP Deploy (Terraform)') {
+            steps {
+                dir('terraform/gcp') {
+                    sh 'terraform init'
+                    sh "terraform apply -var='image_url=${IMAGE_NAME}' -auto-approve"
+                }
+            }
+        }
+        /*
+        stage('Verify Deployment') {
+            steps {
+                // A quick curl check to see if the container is actually responding
+                sh 'sleep 5'
+                sh 'curl http://host.docker.internal:5000/health'
+            }
+        }*/
+
+    }
+    post {
+
+        success {
+            echo "Local deployment successful! App is running at "
+        }
+        failure {
+            echo "Pipeline failed. Check Docker logs or Terraform state."
+        }
+    }
+}
