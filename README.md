@@ -1,3 +1,2 @@
 # MicroServiceMock
-Creating a microservice
-
+Creating a microservice that is a sample 
