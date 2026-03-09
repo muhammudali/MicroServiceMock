@@ -1,5 +1,5 @@
 provider "google" {
-  project = "Mock-MicroService"
+  project = "mock-microservice"
   region  = "europe-west2"
 }
 
