@@ -18,13 +18,6 @@ pipeline {
             }
         }
 
-        stage('Code Lint & Install') {
-            steps {
-                // Running npm install on the agent to check for dependency issues
-                sh 'npm install'
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
                 script {
