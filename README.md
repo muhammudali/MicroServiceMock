@@ -22,9 +22,7 @@ The server exposes the following routes:
 1. Install dependencies:
    ```bash
    npm install
-
-
-node app.js
+   node app.js
 
 ## Infrastructure as Code (Terraform)
 This project uses Terraform to manage deployments in different environments:
@@ -41,17 +39,18 @@ The project includes two separate Jenkins pipelines for automated deployments:
 1. Local Pipeline (local.jenkinsfile)
 Designed for local testing, this pipeline performs the following steps:
 
-* Builds the Docker image hello-microservice-api:latest using the local Docker daemon.
+    * Builds the Docker image hello-microservice-api:latest using the local Docker daemon.
 
-* Deploys the infrastructure locally via Terraform (terraform init and terraform apply -auto-approve).
+    * Deploys the infrastructure locally via Terraform (terraform init and terraform apply -auto-approve).
 
-* Verifies the deployment by querying the /health endpoint at http://host.docker.internal:5000/health.
+    * Verifies the deployment by querying the /health endpoint at http://host.docker.internal:5000/health.
+
 
 2. GCP Pipeline (gcp.jenkinsfile)
 Designed for production deployments to Google Cloud Platform, this pipeline waits for a GitHub push event to trigger. It performs the following steps:
 
-* Builds the Docker image with the respective Jenkins build number.
+    * Builds the Docker image with the respective Jenkins build number.
 
-* Authenticates with GCP via a service account and pushes the newly built image to the GCP Artifact Registry (europe-west2-docker.pkg.dev).
+    * Authenticates with GCP via a service account and pushes the newly built image to the GCP Artifact Registry (europe-west2-docker.pkg.dev).
 
-* Deploys the Cloud Run service automatically by passing the pushed image URL to the GCP Terraform configuration.
+    * Deploys the Cloud Run service automatically by passing the pushed image URL to the GCP Terraform configuration.

@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    options {
+        disableConcurrentBuilds()
+    }
 triggers {
         // Option A: Generic Webhook (Recommended)
         // This waits for a "push" event from GitHub/GitLab
