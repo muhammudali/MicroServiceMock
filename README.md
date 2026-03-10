@@ -1,2 +1,2 @@
 # MicroServiceMock
-Creating a microservice a
+Creating a microservice
