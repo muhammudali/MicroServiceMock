@@ -14,8 +14,7 @@ app.get('/', (req, res) => {
   // Start an active span to track this specific block of logic
   tracer.startActiveSpan('process_hello_world', (span) => {
     try {
-      // NOTE: You can uncomment the line below to test the error tracing!
-      // if (Math.random() > 0.5) throw new Error("Simulated random failure!");
+
 
       res.json({
         message: 'Hello World from GCP Cloud Run!',
